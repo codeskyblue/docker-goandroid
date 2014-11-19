@@ -56,4 +56,10 @@ ADD . /gopath/src/golang.org/x/mobile
 # Install dependencies. This will not overwrite the local copy.
 RUN go get -d -t golang.org/x/mobile/...
 
+RUN apt-get install -y unzip vim tmux htop
+
+RUN curl -O http://goandroid.qiniudn.com/gradle-2.2-bin.zip && unzip gradle-2.2-bin.zip -d /usr/local
+ENV GRADLE_ROOT /usr/local/gradle-2.2
+ENV PATH $PATH:$GRADLE_ROOT/bin
+
 WORKDIR /gopath/src/golang.org/x/mobile
