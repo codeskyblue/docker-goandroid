@@ -58,8 +58,17 @@ RUN go get -d -t golang.org/x/mobile/...
 
 RUN apt-get install -y unzip vim tmux htop
 
+# Install gradle
 RUN curl -O http://goandroid.qiniudn.com/gradle-2.2-bin.zip && unzip gradle-2.2-bin.zip -d /usr/local
 ENV GRADLE_ROOT /usr/local/gradle-2.2
 ENV PATH $PATH:$GRADLE_ROOT/bin
+
+# Install syncthing
+ENV STHOME /root/.config/syncthing
+RUN mkdir -p $STHOME
+RUN curl -L http://goandroid.qiniudn.com/syncthing-linux-amd64-v0.10.6.tar.gz | tar xz -C /usr/local
+RUN ln -sf /usr/local/syncthing-linux-amd64-v0.10.6/syncthing /usr/bin/
+RUN syncthing -generate=$STHOME
+RUN sed -i 's/127.0.0.1:[0-9]*/0.0.0.0:8080/g' $STHOME/config.xml
 
 WORKDIR /gopath/src/golang.org/x/mobile
