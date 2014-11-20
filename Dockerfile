@@ -56,6 +56,8 @@ ADD . /gopath/src/golang.org/x/mobile
 # Install dependencies. This will not overwrite the local copy.
 RUN go get -d -t golang.org/x/mobile/...
 
+# -- bellow modified by codeskyblue --
+ENV HOME /root
 RUN apt-get install -y unzip vim tmux htop
 
 # Install gradle
@@ -72,3 +74,4 @@ RUN syncthing -generate=$STHOME
 RUN sed -i 's/127.0.0.1:[0-9]*/0.0.0.0:8080/g' $STHOME/config.xml
 
 WORKDIR /gopath/src/golang.org/x/mobile
+CMD ["bash"]
