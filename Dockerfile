@@ -42,7 +42,7 @@ ENV PATH $PATH:$ANT_HOME/bin
 # Install Go.
 ENV GOROOT /go
 ENV GOPATH /gopath
-ENV PATH $PATH:$GOROOT/bin
+ENV PATH $PATH:$GOROOT/bin:$GOPATH/bin
 RUN curl https://go.googlecode.com/archive/default.tar.gz | tar xz -C / && \
 	mv /go-default $GOROOT && \
 	echo devel > $GOROOT/VERSION && \
@@ -55,15 +55,20 @@ ADD . /gopath/src/golang.org/x/mobile
 
 # Install dependencies. This will not overwrite the local copy.
 RUN go get -d -t golang.org/x/mobile/...
+RUN go get code.google.com/p/go.mobile/cmd/gobind
 
 # -- bellow modified by codeskyblue --
 ENV HOME /root
-RUN apt-get install -y unzip vim tmux htop
+RUN apt-get install -y unzip vim tmux htop tree gettext ack-grep
 
 # Install gradle
-RUN curl -O http://goandroid.qiniudn.com/gradle-2.2-bin.zip && unzip gradle-2.2-bin.zip -d /usr/local
-ENV GRADLE_ROOT /usr/local/gradle-2.2
+# http://www.gradle.org/downloads
+#
+ENV GRADLE_VERSION 1.12
+ENV GRADLE_ROOT /usr/local/gradle-$GRADLE_VERSION
+RUN curl -L -O https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip && unzip gradle-$GRADLE_VERSION-bin.zip -d /usr/local
 ENV PATH $PATH:$GRADLE_ROOT/bin
+# run gradle
 
 # Install syncthing
 ENV STHOME /root/.config/syncthing
