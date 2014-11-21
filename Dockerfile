@@ -47,8 +47,8 @@ RUN curl https://go.googlecode.com/archive/default.tar.gz | tar xz -C / && \
 	mv /go-default $GOROOT && \
 	echo devel > $GOROOT/VERSION && \
 	cd $GOROOT/src && \
-	(./all.bash; true) && \
-	(CC_FOR_TARGET=$NDK_ROOT/bin/arm-linux-androideabi-gcc GOOS=android GOARCH=arm GOARM=7 ./make.bash; true)
+	./all.bash && \
+	CC_FOR_TARGET=$NDK_ROOT/bin/arm-linux-androideabi-gcc GOOS=android GOARCH=arm GOARM=7 ./make.bash
 
 # Copy the local version of go.mobile to GOPATH.
 ADD . /gopath/src/golang.org/x/mobile
